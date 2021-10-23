@@ -1,0 +1,219 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NextLevel</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas" width="500" height="500"></canvas>
+
+    <script>
+        const canvas = document.querySelector('canvas');
+        const ctx = canvas.getContext('2d');
+        const ball = canvas.getContext('2d');
+        
+        // Player
+        var xplayer = 225;
+        ctx.beginPath();
+        ctx.fillStyle = 'green';
+        ctx.fillRect(xplayer, 480, 100, 10);
+ 
+        window.onkeydown = movement;
+
+        function movement(key) {
+           
+            if (key.code == 'ArrowRight') {
+                ctx.clearRect(xplayer, 480, 100, 10);
+                
+                if (xplayer <= 400) {
+                    xplayer = xplayer + 10;
+                }
+                
+            
+                ctx.fillRect(xplayer, 480, 100, 10);
+            }
+            if (key.code == 'ArrowLeft') {
+                ctx.clearRect(xplayer, 480, 100, 10);
+                if (xplayer >= 0) {
+                    xplayer = xplayer - 10;
+                }
+                
+                ctx.fillRect(xplayer, 480, 100, 10);
+            }
+        }
+
+        // Ball
+        ctx.beginPath();
+        ctx.fillStyle = 'green';
+        ctx.fillRect(xball, yball, 10, 10);
+
+        var xball = 240;
+        var yball = 240;
+        var ballDirectionX = 10;
+        var ballDirectionY = 10;
+
+        var bricks = [[0,0,0,0,0,0,0], [0,0,0,0,0,0,0], [0,0,0,0,0,0,0], [0,0,0,0,0,0,0]];
+
+        function ballMovement() {
+            
+            ctx.clearRect(xball, yball, 10, 10);
+            if (yball == 470) {
+                if(xball >= xplayer && xball <= xplayer + 100) {
+                    if(ballDirectionX == 10 && ballDirectionY == 10) {
+                        ballDirectionX =  10;
+                        ballDirectionY = -10;
+                    }
+                    else if(ballDirectionX == -10 && ballDirectionY == 10) {
+                        ballDirectionX = -10;
+                        ballDirectionY = -10;
+                    }
+                }
+            }
+        
+            if(xball == 0 && ballDirectionY == 10) {
+                ballDirectionX = 10;              
+            }
+
+            else if (xball == 0) {
+                ballDirectionX = 10;
+                ballDirectionY = -10;
+               
+            } 
+           
+            if (yball == 0 && ballDirectionX == -10) {
+                ballDirectionY = 10;
+            }
+            else if (yball == 0) {
+                ballDirectionX = 10;
+                ballDirectionY = 10;
+            }
+
+            if (xball == 500 && ballDirectionX == 10) {
+                ballDirectionX = -10;
+            }
+            else if (xball == 500) {
+                ballDirectionX = -10;
+                ballDirectionY = 10;
+            }
+
+            if (yball == 500) {
+                
+            }
+            
+            xball += ballDirectionX;
+            yball += ballDirectionY;
+            
+            ctx.fillRect(xball, yball, 10, 10);
+
+            // Hit Bricks
+
+            hitBricks(0, 10);
+            hitBricks(1, 40);
+            hitBricks(2, 70);
+            hitBricks(3, 100);
+            
+            
+            function ballBricksDirection() {
+
+                if (ballDirectionX == -10 && ballDirectionY == -10) {
+                    ballDirectionY = 10;
+                }
+                if(ballDirectionX == 10 && ballDirectionY == -10) {
+                    ballDirectionY = 10;
+                }
+
+            }
+
+            function hitBricks(f, y) {
+                
+                if (yball >= y && yball <= (y + 20)) {
+
+                    if (xball >= 10 && xball <= 70) {
+                        if (bricks[f][0] == 0) {
+                            ctx.clearRect(10, y, 60, 20);
+                            ballBricksDirection();
+                            bricks[f][0] = 1;
+                        }
+                    }
+            
+                    if (xball >= 80  && xball <= 140) {
+                        if (bricks[f][1] == 0) {
+                            ctx.clearRect(80, y, 60, 20);
+                            ballBricksDirection();
+                            bricks[f][1] = 1;
+                        }
+                    }
+                    if (xball >= 150  && xball <= 210) {
+                        
+                        if (bricks[f][2] == 0) {
+                            ctx.clearRect(150, y, 60, 20);
+                            ballBricksDirection();
+                            bricks[f][2] = 1;
+                        }
+                        
+                    }
+                    if (xball >= 220 && xball <= 280) {
+                        if (bricks[f][3] == 0) {
+                            ctx.clearRect(220, y, 60, 20);
+                            ballBricksDirection();
+                            bricks[f][3] = 1;
+                            console.log('b');
+                        }
+                    }
+                    if (xball >= 290  && xball <= 350) {
+                        if (bricks[f][4] == 0) {
+                            ctx.clearRect(290, y, 60, 20);
+                            ballBricksDirection();
+                            bricks[f][4] = 1;
+                        }   
+                    }
+                    if (xball >= 360  && xball <= 420) {
+                        if (bricks[f][5] == 0) {
+                            ctx.clearRect(360, y, 60, 20);
+                            ballBricksDirection();
+                            bricks[f][5] = 1;
+                        }     
+                    }
+                    if (xball >= 430  && xball <= 490) {
+                        if (bricks[f][6] == 0) {
+                            ctx.clearRect(430, y, 60, 20);
+                            ballBricksDirection();
+                            bricks[f][6] = 1;
+                        }
+                        
+                    }
+                }
+            }   
+        }
+
+        // Bricks
+
+        createLine(10);
+        createLine(40);
+        createLine(70);
+        createLine(100);
+
+        function createLine(y) {
+            ctx.fillRect(10, y, 60, 20);
+            ctx.fillRect(80, y, 60, 20);
+            ctx.fillRect(150, y, 60, 20);
+            ctx.fillRect(220, y, 60, 20);
+            ctx.fillRect(290, y, 60, 20);
+            ctx.fillRect(360, y, 60, 20);
+            ctx.fillRect(430, y, 60, 20);
+        }
+      
+        setInterval(ballMovement, 100);
+                  
+                
+    </script>
+
+</body>
+
+</html>
