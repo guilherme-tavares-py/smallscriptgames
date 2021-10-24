@@ -1,0 +1,164 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pong</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+            background: black;
+        }
+    </style>
+</head>
+<body>
+    <canvas width="500" height="500"></canvas>
+    <script>
+        const canvas = document.querySelector('canvas');
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = 'white';
+
+        // Player 1
+        let playerOneY = 220;
+        ctx.fillRect(10, playerOneY, 10, 60);
+        
+
+        // Player 2
+
+        let playerTwoY = 220;
+        ctx.fillRect(480, playerTwoY, 10, 60);
+        
+        // Movement 
+        window.onkeydown = playerMovement;
+
+        function playerMovement(key) {
+
+            // Player 1
+            
+                if (key.code == 'KeyW') {
+                    if (playerOneY >= 10) {
+                        ctx.clearRect(10, playerOneY, 10, 60)
+                        playerOneY -= 10
+                        ctx.fillRect(10, playerOneY, 10, 60);
+                    }
+                    
+                }
+                
+                else if (key.code == 'KeyS') {
+                    if (playerOneY <= 430) {
+                        ctx.clearRect(10, playerOneY, 10, 60);
+                        playerOneY += 10
+                        ctx.fillRect(10, playerOneY, 10, 60);
+                    }
+                    
+                }
+
+            // Player 2
+
+                if (key.code == 'ArrowUp') {
+                    if (playerTwoY >= 10) {
+                        ctx.clearRect(480, playerTwoY, 10, 60);
+                        playerTwoY -= 10;
+                        ctx.fillRect(480, playerTwoY, 10, 60);
+                    }
+                    
+                }
+
+                else if (key.code == 'ArrowDown') {
+                    if (playerTwoY <= 430) {
+                        ctx.clearRect(480, playerTwoY, 10, 60);
+                        playerTwoY += 10;
+                        ctx.fillRect(480, playerTwoY, 10, 60);
+                    }   
+                    
+                }
+
+            }
+            
+        // Ball
+
+        
+
+        var ballY = 240;
+        var ballX = 240;
+        var movementsBall = [10, -10];
+        var ballYmovement = movementsBall[Math.floor(Math.random()*2)];
+        var ballXmovement = movementsBall[Math.floor(Math.random()*2)];
+
+        function ballMovement() {
+            if (ballY >= 490 && ballXmovement == 10) {
+                ballYmovement = -10;
+            }
+
+            // Touch wall
+
+            // Top
+            rightTop = ballY == 10 && ballXmovement == -10 && ballYmovement == -10
+            leftTop = ballY == 10 && ballXmovement == 10 && ballYmovement == -10
+
+            if (rightTop || leftTop) {
+                ballYmovement = 10;
+            }
+
+            // Bottom
+
+            rightBottom = ballY == 490 && ballXmovement == -10 && ballYmovement == 10
+            leftBottom = ballY == 490 && ballXmovement == 10 && ballYmovement == 10
+
+            if (rightBottom || leftBottom) {
+                ballYmovement = -10;
+            }
+
+            // If ball touch player one
+
+            if (ballX == 20 && ballY >= playerOneY && ballY <= playerOneY + 60) {
+                if (ballYmovement == 10 && ballXmovement == -10) {
+                    ballXmovement = 10;
+                }
+                if (ballYmovement == -10 && ballXmovement == -10) {
+                    ballXmovement = 10;
+                }
+            }
+
+            // If ball touch player two
+            if (ballX == 470 && ballY >= playerTwoY && ballY <= playerTwoY + 60) {
+        
+                if (ballYmovement == 10 && ballXmovement == 10) {
+                    ballXmovement = -10;
+                }
+
+                if (ballYmovement == -10 && ballXmovement == 10) {
+                    ballXmovement = -10;
+                }
+
+    
+            }
+
+
+
+        
+            if (ballX >= 490 || ballX <= 0) {
+
+                ctx.clearRect(ballX, ballY, 10, 10);
+                ballYmovement = movementsBall[Math.floor(Math.random()*2)];
+                ballXmovement = movementsBall[Math.floor(Math.random()*2)];
+                ballY = 240;
+                ballX = 240;
+
+            }
+
+            ctx.clearRect(ballX, ballY, 10, 10);
+            ballY += ballYmovement;
+            ballX += ballXmovement;
+            ctx.fillRect(ballX, ballY, 10, 10);
+
+
+            
+        }
+
+        setInterval(ballMovement, 75);
+
+        
+    </script>
+</body>
+</html>
